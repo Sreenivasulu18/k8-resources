@@ -13,4 +13,4 @@ spec:
       # provide equal or more than requests
       limits:
         memory: "100mi"
-        cpu: "120mi"
+        cpu: "120m"
