@@ -26,4 +26,4 @@ spec:
   volumes:
   - name: nginx-html
     persistentVolumeClaim:
-      claimName: efs-static
+      claimName: efs-dynamic
