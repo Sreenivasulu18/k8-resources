@@ -1,71 +1,71 @@
 # headless service
-apiVersion: v1 
-kind: Service
+apiVersion: v1
+kind: Service 
 metadata:
   name: nginx-headless
   labels:
     app: nginx
-    purpose: stateful-demo
+    purpose: stateful-demo 
 spec:
-  ports:
-  - port: 80
-    name: web
-  clusterIP: None
+  clusterIp: None
   selector:
     app: nginx
     purpose: stateful-demo
+  ports:
+    - protocol: TCP 
+      port: 80 # service port 
+      name: web
 ---
 # normal service
-apiVersion: v1
-kind: Service
+apiVersion: v1 
+kind: Service 
 metadata:
   name: nginx
-  labels:
+  labels: 
     app: nginx
     purpose: stateful-demo
 spec:
+  selector:
+    app: nginx
+    purpose: stateful-demo
   ports:
-  - port: 80
-    name: web
-  selector:
-    app: nginx
-    purpose: stateful-demo
+    - protocol: TCP 
+      port: 80 # service port
+      name: web
 ---
-# statefulset
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: apps/v1 
+kind: StatefulSet 
 metadata:
   name: nginx
 spec:
-  selector:
+  selctotr:
     matchLabels:
-      app: nginx 
-      purpose: stateful-demo # has to match .spec.template.metadata.labels
-  serviceName: "nginx-headless"
-  replicas: 3 # by default is 1
+      app: nginx
+      purpose: stateful-demo
+  serviceName: "nginx-headless" # this should be headless service name
+  replicas: 3
   template:
     metadata:
       labels:
-        app: nginx 
-        purpose: stateful-demo # has to match .spec.selector.matchLabels
+        app: nginx
+        purpose: stateful-demo
     spec:
       containers:
       - name: nginx
         image: nginx
         ports:
-        - containerPort: 80
+        - containerPort: 80 
           name: web
-        volumeMounts: 
+        volumeMounts:
         - name: www
           mountPath: /usr/share/nginx/html
-  # this is PVC
+    # this is PVC
   volumeClaimTemplates:
   - metadata:
-      name: www
+      name: 
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "roboshop-ebs"
+      storageClassName: "roboshop-ebs" 
       resources:
         requests:
-          storage: 1Gi
-
+          storage: 1Gi 
